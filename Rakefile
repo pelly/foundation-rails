@@ -10,8 +10,9 @@ task :default => :rspec
 namespace :assets do
   desc 'Update Foundation for Sites assets'
   task update: :clean do
+    sh 'npm install'
     sh 'bower install'
-    sh 'cp -R bower_components/foundation-sites/js/* vendor/assets/js/'
+    sh './node_modules/.bin/babel bower_components/foundation-sites/js --out-dir vendor/assets/js'
     sh 'cp -R bower_components/foundation-sites/scss/* vendor/assets/scss/'
     sh 'cp -R bower_components/motion-ui/src/* vendor/assets/scss/motion-ui'
 

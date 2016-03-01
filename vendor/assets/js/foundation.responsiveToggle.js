@@ -1,106 +1,135 @@
-/**
- * ResponsiveToggle module.
- * @module foundation.responsiveToggle
- * @requires foundation.util.mediaQuery
- */
-!function($, Foundation) {
-
 'use strict';
 
-/**
- * Creates a new instance of Tab Bar.
- * @class
- * @fires ResponsiveToggle#init
- * @param {jQuery} element - jQuery object to attach tab bar functionality to.
- * @param {Object} options - Overrides to the default plugin settings.
- */
-function ResponsiveToggle(element, options) {
-  this.$element = $(element);
-  this.options = $.extend({}, ResponsiveToggle.defaults, this.$element.data(), options);
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-  this._init();
-  this._events();
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-  Foundation.registerPlugin(this, 'ResponsiveToggle');
-}
+!function ($) {
 
-ResponsiveToggle.defaults = {
   /**
-   * The breakpoint after which the menu is always shown, and the tab bar is hidden.
-   * @option
-   * @example 'medium'
+   * ResponsiveToggle module.
+   * @module foundation.responsiveToggle
+   * @requires foundation.util.mediaQuery
    */
-  hideFor: 'medium'
-};
 
-/**
- * Initializes the tab bar by finding the target element, toggling element, and running update().
- * @function
- * @private
- */
-ResponsiveToggle.prototype._init = function() {
-  var targetID = this.$element.data('responsive-toggle');
-  if (!targetID) {
-    console.error('Your tab bar needs an ID of a Menu as the value of data-tab-bar.');
-  }
+  var ResponsiveToggle = function () {
+    /**
+     * Creates a new instance of Tab Bar.
+     * @class
+     * @fires ResponsiveToggle#init
+     * @param {jQuery} element - jQuery object to attach tab bar functionality to.
+     * @param {Object} options - Overrides to the default plugin settings.
+     */
 
-  this.$targetMenu = $('#'+targetID);
-  this.$toggler = this.$element.find('[data-toggle]');
+    function ResponsiveToggle(element, options) {
+      _classCallCheck(this, ResponsiveToggle);
 
-  this._update();
-};
+      this.$element = $(element);
+      this.options = $.extend({}, ResponsiveToggle.defaults, this.$element.data(), options);
 
-/**
- * Adds necessary event handlers for the tab bar to work.
- * @function
- * @private
- */
-ResponsiveToggle.prototype._events = function() {
-  var _this = this;
+      this._init();
+      this._events();
 
-  $(window).on('changed.zf.mediaquery', this._update.bind(this));
-
-  this.$toggler.on('click.zf.responsiveToggle', this.toggleMenu.bind(this));
-};
-
-/**
- * Checks the current media query to determine if the tab bar should be visible or hidden.
- * @function
- * @private
- */
-ResponsiveToggle.prototype._update = function() {
-  // Mobile
-  if (!Foundation.MediaQuery.atLeast(this.options.hideFor)) {
-    this.$element.show();
-    this.$targetMenu.hide();
-  }
-
-  // Desktop
-  else {
-    this.$element.hide();
-    this.$targetMenu.show();
-  }
-};
-
-/**
- * Toggles the element attached to the tab bar. The toggle only happens if the screen is small enough to allow it.
- * @function
- * @fires ResponsiveToggle#toggled
- */
-ResponsiveToggle.prototype.toggleMenu = function() {
-  if (!Foundation.MediaQuery.atLeast(this.options.hideFor)) {
-    this.$targetMenu.toggle(0);
+      Foundation.registerPlugin(this, 'ResponsiveToggle');
+    }
 
     /**
-     * Fires when the element attached to the tab bar toggles.
-     * @event ResponsiveToggle#toggled
+     * Initializes the tab bar by finding the target element, toggling element, and running update().
+     * @function
+     * @private
      */
-    this.$element.trigger('toggled.zf.responsiveToggle');
-  }
-};
-ResponsiveToggle.prototype.destroy = function(){
-  //TODO this...
-};
-Foundation.plugin(ResponsiveToggle, 'ResponsiveToggle');
 
-}(jQuery, Foundation);
+
+    _createClass(ResponsiveToggle, [{
+      key: '_init',
+      value: function _init() {
+        var targetID = this.$element.data('responsive-toggle');
+        if (!targetID) {
+          console.error('Your tab bar needs an ID of a Menu as the value of data-tab-bar.');
+        }
+
+        this.$targetMenu = $('#' + targetID);
+        this.$toggler = this.$element.find('[data-toggle]');
+
+        this._update();
+      }
+
+      /**
+       * Adds necessary event handlers for the tab bar to work.
+       * @function
+       * @private
+       */
+
+    }, {
+      key: '_events',
+      value: function _events() {
+        var _this = this;
+
+        $(window).on('changed.zf.mediaquery', this._update.bind(this));
+
+        this.$toggler.on('click.zf.responsiveToggle', this.toggleMenu.bind(this));
+      }
+
+      /**
+       * Checks the current media query to determine if the tab bar should be visible or hidden.
+       * @function
+       * @private
+       */
+
+    }, {
+      key: '_update',
+      value: function _update() {
+        // Mobile
+        if (!Foundation.MediaQuery.atLeast(this.options.hideFor)) {
+          this.$element.show();
+          this.$targetMenu.hide();
+        }
+
+        // Desktop
+        else {
+            this.$element.hide();
+            this.$targetMenu.show();
+          }
+      }
+
+      /**
+       * Toggles the element attached to the tab bar. The toggle only happens if the screen is small enough to allow it.
+       * @function
+       * @fires ResponsiveToggle#toggled
+       */
+
+    }, {
+      key: 'toggleMenu',
+      value: function toggleMenu() {
+        if (!Foundation.MediaQuery.atLeast(this.options.hideFor)) {
+          this.$targetMenu.toggle(0);
+
+          /**
+           * Fires when the element attached to the tab bar toggles.
+           * @event ResponsiveToggle#toggled
+           */
+          this.$element.trigger('toggled.zf.responsiveToggle');
+        }
+      }
+    }, {
+      key: 'destroy',
+      value: function destroy() {
+        //TODO this...
+      }
+    }]);
+
+    return ResponsiveToggle;
+  }();
+
+  ResponsiveToggle.defaults = {
+    /**
+     * The breakpoint after which the menu is always shown, and the tab bar is hidden.
+     * @option
+     * @example 'medium'
+     */
+    hideFor: 'medium'
+  };
+
+  // Window exports
+  Foundation.plugin(ResponsiveToggle, 'ResponsiveToggle');
+}(jQuery);

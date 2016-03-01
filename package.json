@@ -1,0 +1,19 @@
+{
+  "name": "foundation-rails",
+  "version": "1.0.0",
+  "description": "[![Gem Version](https://badge.fury.io/rb/foundation-rails.svg)](https://badge.fury.io/rb/foundation-rails)",
+  "main": "index.js",
+    "scripts": {
+	"test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+	"type": "git"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "devDependencies": {
+	"babel-cli": ">=6.0",
+	"babel-preset-es2015": ">=6.0"
+    }
+}

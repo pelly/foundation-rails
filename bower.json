@@ -1,8 +1,11 @@
 {
   "name": "foundation-rails",
-  "version": "6.1.2.0",
+  "version": "6.2.0.0",
   "dependencies": {
-    "foundation-sites": "6.1.2",
+      "foundation-sites": "file:///Users/jpelly/projects/stocker/foundation-sites/.git#v6.2.1",
     "motion-ui": "1.2.0"
-  }
+  },
+    "resolutions": {
+	"jquery": "2.2.1"
+    }
 }

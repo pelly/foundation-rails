@@ -1,4 +1,13 @@
-!function(Foundation, window){
+'use strict';
+
+!function ($) {
+
+  Foundation.Box = {
+    ImNotTouchingYou: ImNotTouchingYou,
+    GetDimensions: GetDimensions,
+    GetOffsets: GetOffsets
+  };
+
   /**
    * Compares the dimensions of an element to a container and determines collision events with container.
    * @function
@@ -9,27 +18,36 @@
    * @default if no parent object passed, detects collisions with `window`.
    * @returns {Boolean} - true if collision free, false if a collision in any direction.
    */
-  var ImNotTouchingYou = function(element, parent, lrOnly, tbOnly){
+  function ImNotTouchingYou(element, parent, lrOnly, tbOnly) {
     var eleDims = GetDimensions(element),
-        top, bottom, left, right;
+        top,
+        bottom,
+        left,
+        right;
 
-    if(parent){
+    if (parent) {
       var parDims = GetDimensions(parent);
 
-      bottom = (eleDims.offset.top + eleDims.height <= parDims.height + parDims.offset.top);
-      top    = (eleDims.offset.top >= parDims.offset.top);
-      left   = (eleDims.offset.left >= parDims.offset.left);
-      right  = (eleDims.offset.left + eleDims.width <= parDims.width);
-    }else{
-      bottom = (eleDims.offset.top + eleDims.height <= eleDims.windowDims.height + eleDims.windowDims.offset.top);
-      top    = (eleDims.offset.top >= eleDims.windowDims.offset.top);
-      left   = (eleDims.offset.left >= eleDims.windowDims.offset.left);
-      right  = (eleDims.offset.left + eleDims.width <= eleDims.windowDims.width);
+      bottom = eleDims.offset.top + eleDims.height <= parDims.height + parDims.offset.top;
+      top = eleDims.offset.top >= parDims.offset.top;
+      left = eleDims.offset.left >= parDims.offset.left;
+      right = eleDims.offset.left + eleDims.width <= parDims.width;
+    } else {
+      bottom = eleDims.offset.top + eleDims.height <= eleDims.windowDims.height + eleDims.windowDims.offset.top;
+      top = eleDims.offset.top >= eleDims.windowDims.offset.top;
+      left = eleDims.offset.left >= eleDims.windowDims.offset.left;
+      right = eleDims.offset.left + eleDims.width <= eleDims.windowDims.width;
     }
+
     var allDirs = [bottom, top, left, right];
 
-    if(lrOnly){ return left === right === true; }
-    if(tbOnly){ return top === bottom === true; }
+    if (lrOnly) {
+      return left === right === true;
+    }
+
+    if (tbOnly) {
+      return top === bottom === true;
+    }
 
     return allDirs.indexOf(false) === -1;
   };
@@ -41,10 +59,12 @@
    * @returns {Object} - nested object of integer pixel values
    * TODO - if element is window, return only those values.
    */
-  var GetDimensions = function(elem, test){
+  function GetDimensions(elem, test) {
     elem = elem.length ? elem[0] : elem;
 
-    if(elem === window || elem === document){ throw new Error("I'm sorry, Dave. I'm afraid I can't do that."); }
+    if (elem === window || elem === document) {
+      throw new Error("I'm sorry, Dave. I'm afraid I can't do that.");
+    }
 
     var rect = elem.getBoundingClientRect(),
         parRect = elem.parentNode.getBoundingClientRect(),
@@ -76,7 +96,8 @@
         }
       }
     };
-  };
+  }
+
   /**
    * Returns an object of top and left integer pixel values for dynamically rendered elements,
    * such as: Tooltip, Reveal, and Dropdown
@@ -89,15 +110,14 @@
    * @param {Boolean} isOverflow - if a collision event is detected, sets to true to default the element to full width - any desired offset.
    * TODO alter/rewrite to work with `em` values as well/instead of pixels
    */
-  var GetOffsets = function(element, anchor, position, vOffset, hOffset, isOverflow){
+  function GetOffsets(element, anchor, position, vOffset, hOffset, isOverflow) {
     var $eleDims = GetDimensions(element),
-    // var $eleDims = GetDimensions(element),
         $anchorDims = anchor ? GetDimensions(anchor) : null;
-        // $anchorDims = anchor ? GetDimensions(anchor) : null;
-    switch(position){
+
+    switch (position) {
       case 'top':
         return {
-          left: $anchorDims.offset.left,
+          left: Foundation.rtl() ? $anchorDims.offset.left - $eleDims.width + $anchorDims.width : $anchorDims.offset.left,
           top: $anchorDims.offset.top - ($eleDims.height + vOffset)
         };
         break;
@@ -115,32 +135,32 @@
         break;
       case 'center top':
         return {
-          left: ($anchorDims.offset.left + ($anchorDims.width / 2)) - ($eleDims.width / 2),
+          left: $anchorDims.offset.left + $anchorDims.width / 2 - $eleDims.width / 2,
           top: $anchorDims.offset.top - ($eleDims.height + vOffset)
         };
         break;
       case 'center bottom':
         return {
-          left: isOverflow ? hOffset : (($anchorDims.offset.left + ($anchorDims.width / 2)) - ($eleDims.width / 2)),
+          left: isOverflow ? hOffset : $anchorDims.offset.left + $anchorDims.width / 2 - $eleDims.width / 2,
           top: $anchorDims.offset.top + $anchorDims.height + vOffset
         };
         break;
       case 'center left':
         return {
           left: $anchorDims.offset.left - ($eleDims.width + hOffset),
-          top: ($anchorDims.offset.top + ($anchorDims.height / 2)) - ($eleDims.height / 2)
+          top: $anchorDims.offset.top + $anchorDims.height / 2 - $eleDims.height / 2
         };
         break;
       case 'center right':
         return {
           left: $anchorDims.offset.left + $anchorDims.width + hOffset + 1,
-          top: ($anchorDims.offset.top + ($anchorDims.height / 2)) - ($eleDims.height / 2)
+          top: $anchorDims.offset.top + $anchorDims.height / 2 - $eleDims.height / 2
         };
         break;
       case 'center':
         return {
-          left: ($eleDims.windowDims.offset.left + ($eleDims.windowDims.width / 2)) - ($eleDims.width / 2),
-          top: ($eleDims.windowDims.offset.top + ($eleDims.windowDims.height / 2)) - ($eleDims.height / 2)
+          left: $eleDims.windowDims.offset.left + $eleDims.windowDims.width / 2 - $eleDims.width / 2,
+          top: $eleDims.windowDims.offset.top + $eleDims.windowDims.height / 2 - $eleDims.height / 2
         };
         break;
       case 'reveal':
@@ -156,14 +176,9 @@
         break;
       default:
         return {
-          left: $anchorDims.offset.left,
+          left: Foundation.rtl() ? $anchorDims.offset.left - $eleDims.width + $anchorDims.width : $anchorDims.offset.left,
           top: $anchorDims.offset.top + $anchorDims.height + vOffset
         };
     }
-  };
-  Foundation.Box = {
-    ImNotTouchingYou: ImNotTouchingYou,
-    GetDimensions: GetDimensions,
-    GetOffsets: GetOffsets
-  };
-}(window.Foundation, window);
+  }
+}(jQuery);
